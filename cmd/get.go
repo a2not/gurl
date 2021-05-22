@@ -55,7 +55,10 @@ func httpget(cmd *cobra.Command, args []string) error {
 	}
 	url := args[0]
 
-	resp, _ := http.Get(url)
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
 	defer resp.Body.Close()
 
 	fmt.Printf("%v %v\n", resp.Proto, resp.Status)
