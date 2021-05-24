@@ -65,14 +65,11 @@ func getURL(url string, w io.Writer) error {
 	}
 	defer resp.Body.Close()
 
-	if _, err := w.Write([]byte(fmt.Sprintf("%v %v\n", resp.Proto, resp.Status))); err != nil {
-		return err
-	}
+	fmt.Fprintf(w, "%v: %v\n", resp.Proto, resp.Status)
 
 	for k, v := range resp.Header {
-		if _, err := w.Write([]byte(fmt.Sprintf("%v : %v\n", k, v))); err != nil {
-			return err
-		}
+		fmt.Fprintf(w, "%v: %v\n", k, v)
 	}
+
 	return nil
 }
