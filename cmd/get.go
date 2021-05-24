@@ -18,7 +18,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -32,7 +34,7 @@ var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "execute HTTP GET request",
 	Long:  `gurl get is subcommand for sending HTTP GET request to a given url.`,
-	RunE:  httpget,
+	RunE:  httpGet,
 }
 
 func init() {
@@ -49,22 +51,28 @@ func init() {
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func httpget(cmd *cobra.Command, args []string) error {
+func httpGet(cmd *cobra.Command, args []string) error {
 	if len(args) < 1 {
 		return errUrlNotGiven
 	}
-	url := args[0]
+	return getURL(args[0], os.Stdout)
+}
 
+func getURL(url string, w io.Writer) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
-	fmt.Printf("%v %v\n", resp.Proto, resp.Status)
+	if _, err := w.Write([]byte(fmt.Sprintf("%v %v\n", resp.Proto, resp.Status))); err != nil {
+		return err
+	}
 
 	for k, v := range resp.Header {
-		fmt.Printf("%v : %v\n", k, v)
+		if _, err := w.Write([]byte(fmt.Sprintf("%v : %v\n", k, v))); err != nil {
+			return err
+		}
 	}
 	return nil
 }
