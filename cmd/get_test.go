@@ -38,7 +38,6 @@ Content-Type: [text/plain; charset=utf-8]
 		}
 
 		got := ignoreLines(buf.Bytes(), "Date")
-		fmt.Println(string(got))
 
 		if diff := cmp.Diff(tt.wantOut, got); diff != "" {
 			t.Errorf("Output string differ (-want +got): \n%v", diff)
@@ -66,8 +65,6 @@ func ignoreLines(b []byte, prefixs ...string) []byte {
 		if _, exist := set[k]; exist {
 			continue
 		}
-
-		fmt.Println(string(line))
 
 		res = append(res, line...)
 		res = append(res, []byte("\n")...)
