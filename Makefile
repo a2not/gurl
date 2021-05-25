@@ -7,6 +7,5 @@ run:
 
 test:
 	go test -v ./cmd -count=1
-	# go clean -testcache
 
 .PHONY: get run test
