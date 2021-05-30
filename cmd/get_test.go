@@ -22,8 +22,8 @@ func TestGetURL(t *testing.T) {
 			}),
 			wantErr: nil,
 			wantOut: []byte(`HTTP/1.1: 200 OK
-Content-Length: [14]
-Content-Type: [text/plain; charset=utf-8]
+Content-Length: 14
+Content-Type: text/plain; charset=utf-8
 `),
 		},
 	}

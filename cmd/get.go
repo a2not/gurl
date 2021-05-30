@@ -68,7 +68,11 @@ func getURL(url string, w io.Writer) error {
 	fmt.Fprintf(w, "%v: %v\n", resp.Proto, resp.Status)
 
 	for k, v := range resp.Header {
-		fmt.Fprintf(w, "%v: %v\n", k, v)
+		if len(v) == 1 {
+			fmt.Fprintf(w, "%v: %v\n", k, v[0])
+		} else {
+			fmt.Fprintf(w, "%v: %v\n", k, v)
+		}
 	}
 
 	return nil
