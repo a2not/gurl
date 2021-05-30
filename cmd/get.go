@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -58,8 +59,13 @@ func httpGet(cmd *cobra.Command, args []string) error {
 	return getURL(args[0], os.Stdout)
 }
 
-func getURL(url string, w io.Writer) error {
-	resp, err := http.Get(url)
+func getURL(rawurl string, w io.Writer) error {
+	u, err := url.Parse(rawurl)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Get(u.String())
 	if err != nil {
 		return err
 	}
